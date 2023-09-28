@@ -7,6 +7,9 @@ import 'package:jokes/presentation/screens/static_splashscreen.dart';
 import 'package:jokes/routes/route_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jokes/services/navigation_service.dart';
+import 'package:jokes/store/app_store.dart';
+import 'package:provider/provider.dart';
 import 'services/services.dart';
 
 class AppInit extends StatefulWidget {
@@ -43,9 +46,14 @@ class _AppInitState extends State<AppInit> {
       await Future.delayed(
         Duration.zero,
         () async {
-          if (locator<AppPrefs>().isLoggedIn.getValue()) {
-            /// initialize apis
-          }
+          context.read<AppStore>().getJoke();
+          Timer.periodic(const Duration(seconds: 60), (timer) {
+            locator<NavigationService>()
+                .navigatorKey
+                .currentContext!
+                .read<AppStore>()
+                .getJoke();
+          });
         },
       );
     } catch (e, trace) {

@@ -8,11 +8,7 @@ class AppPrefs {
 
   AppPrefs(
     this.preferences,
-  )   : isLoggedIn = preferences.getBool(
-          PrefsConstants.isLoggedIn,
-          defaultValue: false,
-        ),
-        isNetworkError = preferences.getBool(
+  )   : isNetworkError = preferences.getBool(
           PrefsConstants.isNetworkError,
           defaultValue: false,
         ),
@@ -23,13 +19,17 @@ class AppPrefs {
         token = preferences.getString(
           PrefsConstants.token,
           defaultValue: '',
+        ),
+        jokes = preferences.getCustomValue(
+          PrefsConstants.jokes,
+          defaultValue: {},
+          adapter: const JsonAdapter(),
         );
 
-  final Preference<bool> isLoggedIn;
   final Preference<bool> isFirstOpen;
   final Preference<bool> isNetworkError;
   final Preference<String> token;
-  Preference<>
+  Preference<Map<String, dynamic>> jokes;
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -75,8 +75,8 @@ class AppPrefs {
 }
 
 class PrefsConstants {
-  static const String isLoggedIn = 'isLoggedIn';
   static const String isNetworkError = 'isNetworkError';
   static const String isFirstOpen = 'isFirstOpen';
   static const String token = 'token';
+  static const String jokes = 'jokes';
 }

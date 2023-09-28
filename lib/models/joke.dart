@@ -17,5 +17,7 @@ class JokeList {
 
   JokeList({this.jokes});
 
-  factory JokeList.fromJson(Map<String, dynamic> json) => JokeList();
+  factory JokeList.fromJson(Map<String, dynamic> json) => JokeList(
+        jokes: json['jokes'],
+      );
 }
