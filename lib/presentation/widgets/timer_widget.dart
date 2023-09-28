@@ -86,9 +86,6 @@ class _TimerWidgetState extends State<TimerWidget>
               if (duration.inSeconds == 0) {
                 return "Start";
               } else {
-                shakeController
-                  ..reset()
-                  ..forward(from: 0);
                 return Function.apply(defaultFormatterFunction, [duration]);
               }
             },

@@ -32,11 +32,24 @@ abstract class _AppStore with Store {
     countController.restart(duration: 60);
   }
 
+  void scroll() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.fastOutSlowIn,
+        );
+      }
+    });
+  }
+
   @action
   Future<void> getJoke() async {
     final jsonData = locator<AppPrefs>().jokes.getValue();
     if (jokes.isEmpty) {
       jokes.addAll(jsonData.values.toList().map((e) => e.toString()).toList());
+      scroll();
     }
     final response = await Services().getJoke();
     countController.restart(duration: 60);
@@ -47,13 +60,7 @@ abstract class _AppStore with Store {
         jokes.add(joke.joke ?? '');
         jsonData.addAll({'${jsonData.length + 1}': joke.joke});
         locator<AppPrefs>().jokes.setValue(jsonData);
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          scrollController.animateTo(
-            10 * 120,
-            duration: const Duration(milliseconds: 1000),
-            curve: Curves.fastOutSlowIn,
-          );
-        });
+        scroll();
       } else {
         if (jokes.isNotEmpty) {
           jokes.removeLast();
@@ -63,13 +70,7 @@ abstract class _AppStore with Store {
         jokes.add(joke.joke ?? '');
         locator<AppPrefs>().jokes.setValue(jsonData);
         if (jokes.isNotEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            scrollController.animateTo(
-              10 * 120,
-              duration: const Duration(milliseconds: 1000),
-              curve: Curves.fastOutSlowIn,
-            );
-          });
+          scroll();
         }
       }
     } else {
