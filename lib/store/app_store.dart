@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:jokes/helper/app_prefs.dart';
+import 'package:jokes/helper/flash_helper.dart';
 import 'package:jokes/main.dart';
 import 'package:jokes/models/joke.dart';
 import 'package:jokes/services/services.dart';
@@ -71,6 +72,8 @@ abstract class _AppStore with Store {
           });
         }
       }
+    } else {
+      FlashHelper.errorBar(message: 'Please try again...');
     }
   }
 }
